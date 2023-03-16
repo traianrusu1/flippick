@@ -7,12 +7,12 @@ export class UsersService {
     {
       userId: 1,
       username: 'test@test.com',
-      password: '1234',
+      password: '123456',
     },
     {
       userId: 2,
       username: 'test1@test.com',
-      password: '0987',
+      password: '098765',
     },
   ];
 

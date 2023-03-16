@@ -1,5 +1,5 @@
 const AppConfig = {
-  apiBase: 'localhost:3002',
+  apiBase: 'http://localhost:3002',
 }
 
 export default AppConfig

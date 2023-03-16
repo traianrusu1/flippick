@@ -8,15 +8,37 @@ import {
   Sheet,
   Theme,
   XStack,
+  Text,
   YStack,
+  Spinner,
 } from '@my/ui'
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
 import React, { useCallback, useState } from 'react'
 import { useLink } from 'solito/link'
+import { useForm, Controller } from 'react-hook-form'
+import AppConfig from 'app/constants'
+import axios from 'axios'
+import api from 'app/helpers/api'
+
+enum NetworkStates {
+  INIT = 'INIT',
+  FETCHING = 'FETCHING',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+}
 
 export function LoginScreen({ navigation }) {
-  const [email, setemail] = useState('')
-  const [password, setpassword] = useState('')
+  const [loggedInStatus, setLoggedInStatus] = useState<NetworkStates>(NetworkStates.INIT)
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  })
   const linkProps = useLink({
     href: '/login',
   })
@@ -32,6 +54,22 @@ export function LoginScreen({ navigation }) {
     },
     []
   )
+  const onSubmit = async (data) => {
+    setLoggedInStatus(NetworkStates.FETCHING)
+    console.log(data)
+    try {
+      // setTimeout(() => {
+      await axios.post(api('/auth/login'), data)
+      setLoggedInStatus(NetworkStates.SUCCESS)
+      navigation.navigate('home')
+
+      // }, 1000)
+    } catch (e) {
+      console.log(e)
+      console.log('AN ERROR OCCURRED')
+      setLoggedInStatus(NetworkStates.ERROR)
+    }
+  }
 
   return (
     <YStack f={1} jc="center" ai="center" p="$4" space>
@@ -40,20 +78,56 @@ export function LoginScreen({ navigation }) {
         <Paragraph ta="center">Please Login</Paragraph>
         <Theme name="orange">
           <YStack space="$4" maw={600}>
-            <Input
-              size="$4"
-              borderWidth={2}
-              placeholder="email"
-              onChangeText={handleInputChange('username')}
+            <Controller
+              control={control}
+              rules={{
+                required: 'An email is required',
+                minLength: { value: 5, message: 'Must be at least 5 characters long' },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  size="$4"
+                  borderWidth={2}
+                  placeholder="Email"
+                  // onChangeText={handleInputChange('username')}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                />
+              )}
+              name="username"
             />
-            <Input
-              size="$4"
-              borderWidth={2}
-              placeholder="password"
-              secureTextEntry
-              onChangeText={handleInputChange('password')}
+            {errors.username && <Text color="red">{errors.username.message}</Text>}
+
+            <Controller
+              control={control}
+              rules={{
+                required: 'An email is required',
+                minLength: { value: 6, message: 'Must be at least 6 characters long' },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  size="$4"
+                  borderWidth={2}
+                  placeholder="Password"
+                  // onChangeText={handleInputChange('username')}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                />
+              )}
+              name="password"
             />
-            <Button onPress={handleLoginPress}>Login</Button>
+            {errors.password && <Text color="red">{errors.password.message}</Text>}
+
+            <Button onPress={handleSubmit(onSubmit)}>Login</Button>
+
+            {loggedInStatus === NetworkStates.FETCHING && (
+              <Spinner size="large" color="$orange10" />
+            )}
+            {loggedInStatus === NetworkStates.ERROR && (
+              <Text color="red">Wrong email or password combination!</Text>
+            )}
           </YStack>
         </Theme>
         <Separator />
