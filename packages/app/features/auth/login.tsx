@@ -35,8 +35,8 @@ export function LoginScreen({ navigation }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      username: '',
-      password: '',
+      username: 'test@test.com',
+      password: '123456',
     },
   })
   const linkProps = useLink({
@@ -44,7 +44,7 @@ export function LoginScreen({ navigation }) {
   })
 
   const handleLoginPress = useCallback(() => {
-    navigation.navigate('home')
+    navigation.navigate('tabs')
   }, [])
 
   const handleInputChange = useCallback(
@@ -61,7 +61,7 @@ export function LoginScreen({ navigation }) {
       // setTimeout(() => {
       await axios.post(api('/auth/login'), data)
       setLoggedInStatus(NetworkStates.SUCCESS)
-      navigation.navigate('home')
+      navigation.navigate('tabs')
 
       // }, 1000)
     } catch (e) {
