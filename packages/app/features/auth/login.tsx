@@ -43,10 +43,6 @@ export function LoginScreen({ navigation }) {
     href: '/login',
   })
 
-  const handleLoginPress = useCallback(() => {
-    navigation.navigate('tabs')
-  }, [])
-
   const handleInputChange = useCallback(
     (fieldName) => (val) => {
       console.log(val)
@@ -61,7 +57,7 @@ export function LoginScreen({ navigation }) {
       // setTimeout(() => {
       await axios.post(api('/auth/login'), data)
       setLoggedInStatus(NetworkStates.SUCCESS)
-      navigation.navigate('tabs')
+      navigation.replace('tabs')
 
       // }, 1000)
     } catch (e) {

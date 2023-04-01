@@ -51,7 +51,7 @@ const items = [
 
 export function HomeScreen({ navigation }) {
   const handleItemPress = (item) => () => {
-    navigation.navigate('select', { params: { item: item } })
+    navigation.navigate('Select', { params: { item: item } })
   }
 
   return (
@@ -69,6 +69,7 @@ export function HomeScreen({ navigation }) {
             // scale={0.9}
             hoverStyle={{ scale: 0.925 }}
             pressStyle={{ scale: 0.875 }}
+            key={item.name}
           />
         ))}
       </YStack>

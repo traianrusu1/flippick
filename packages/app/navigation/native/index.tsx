@@ -30,7 +30,7 @@ export function TabNavigatorScreen() {
         tabBarIcon: ({ focused, color, size }) => {
           let Icon
 
-          if (route.name === 'Home') {
+          if (route.name === 'HomeNavigation') {
             Icon = Home
           } else if (route.name === 'User') {
             Icon = User
@@ -45,7 +45,11 @@ export function TabNavigatorScreen() {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Home" component={HomeNavigation} options={{ headerShown: false }} />
+      <Tab.Screen
+        name="HomeNavigation"
+        component={HomeNavigation}
+        options={{ headerShown: false }}
+      />
       <Tab.Screen name="User" component={UserDetailScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>

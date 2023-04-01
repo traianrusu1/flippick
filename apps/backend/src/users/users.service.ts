@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './interfaces/user.interface';
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 @Injectable()
 export class UsersService {
